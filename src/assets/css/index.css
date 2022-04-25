@@ -1,7 +1,10 @@
 body {
     background-color: #F3F3F3;
 }
-
+/*body .el-popover{*/
+/*    left: 1050px !important;*/
+/*    background-color: red;*/
+/*}*/
 .m_layout {
     min-width: 300px;
     max-width: 640px;
@@ -306,4 +309,20 @@ body {
     font-weight: 800;
     font-family: "微软雅黑";
     font-size: 16px;
+}
+
+/* 添加的样式 */
+
+.el-dialog__body{
+    padding: 25px 65px 30px !important;
+}
+.el-dialog__body h1{
+    text-align: center;
+}
+.el-dialog__body label{
+    display: inline-block;
+    width: 79px;
+}
+.el-dialog__body .el-input{
+    width: 300px;
 }

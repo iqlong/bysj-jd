@@ -1,10 +1,11 @@
 import getters from './getter.js';
 const state = {
-    isShow: true,
+    isShow: false,
     isNavShow: true,
     userInfo: {}
 }
 const mutations = {
+    // 第一个参数是state容器，第二个是参数
     showLoading: (state) => {
         state.isShow = true
     },

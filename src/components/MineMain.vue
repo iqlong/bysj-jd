@@ -237,6 +237,7 @@
 						console.log(err);
 					});
 				}else{
+				  // 没有登录就使用push方法，但是这样会导致 go(-1)出现问题
 					_this.$router.push({
 						path:'/login',
 					})

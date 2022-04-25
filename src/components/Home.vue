@@ -13,7 +13,6 @@
 	</div>
 </template>
  <script>
-    
     import HomeHeaderView from './HomeHeader.vue';
     import HomeBannerView from './HomeBanner.vue';
     import HomeNavView from './HomeNav.vue';
@@ -26,12 +25,24 @@
         HomeNavView,
         HomeMainView
        },
+
        mounted(){
         bindEvent();
         scrollPic();
        }
     }
 </script>
-<style>
+<style  lang="css">
+/* 这种引入方式相当于发请求，scoped没有效果，需要写在src中 */
 @import '../assets/css/index.css';
+</style>
+<style  lang="less">
+  body .el-popover{
+    left: 1134px !important;
+    width: auto !important;
+    min-width: 0;
+    .popper__arrow {
+      left: 38px !important;
+    }
+  }
 </style>

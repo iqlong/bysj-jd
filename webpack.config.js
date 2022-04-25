@@ -32,11 +32,16 @@ module.exports = {
             options: {
                 name: '[name].[ext]?[hash]'
             }
+        }, {
+            // cli中不用是因为其中有    presets: [ '@vue/cli-plugin-babel/preset' ]
+            test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+            loader: 'file-loader'
         }]
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': 'vue/dist/vue.esm.js',
+            '@':    path.resolve('src')
         }
     },
     devServer: {

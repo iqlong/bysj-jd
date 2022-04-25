@@ -6,34 +6,34 @@ function $id(id) {
 }
 
 function bindEvent() {
-    var sea = $id("my_search");
+    let sea = $id("my_search");
     /*banner对象*/
-    var banner = $id("my_banner");
+    let banner = $id("my_banner");
     /*高度*/
-    var height = banner.offsetHeight;
+    let height = banner.offsetHeight;
     window.onscroll = function() {
-        var top = document.body.scrollTop;
+        let top = document.body.scrollTop;
         /*当滚动高度大于banner的高度时候颜色不变*/
         if (top > height) {
             sea.style.background = "rgba(201,21,35,0.85)";
         } else {
-            var op = top / height * 0.85;
+            let op = top / height * 0.85;
             sea.style.background = "rgba(201,21,35," + op + ")";
         }
     };
 }
 
 function scrollPic() {
-    var imgBox = document.getElementsByClassName("banner_box")[0];
-    var width = $id("my_banner").offsetWidth;
-    var pointBox = document.getElementsByClassName("point_box")[0];
-    var ols = pointBox.children;
-    var indexx = 1;
-    var timer = null;
-    var moveX = 0;
-    var endX = 0;
-    var startX = 0;
-    var square = 0;
+    let imgBox = document.getElementsByClassName("banner_box")[0];
+    let width = $id("my_banner").offsetWidth;
+    let pointBox = document.getElementsByClassName("point_box")[0];
+    let ols = pointBox.children;
+    let indexx = 1;
+    let timer = null;
+    let moveX = 0;
+    let endX = 0;
+    let startX = 0;
+    let square = 0;
 
     function addTransition() {
         imgBox.style.transition = "all .3s ease 0s";
@@ -51,10 +51,10 @@ function scrollPic() {
     }
     //3. 开始动画部分
     pointBox.children[0].className = "now";
-    for (var i = 0; i < ols.length; i++) {
+    for (let i = 0; i < ols.length; i++) {
         ols[i].index = i; // 获得当前第几个小li 的索引号
         ols[i].onmouseover = function() {
-            for (var j = 0; j < ols.length; j++) {
+            for (let j = 0; j < ols.length; j++) {
                 ols[j].className = ""; // 所有的都要清空
             }
             this.className = "now";
@@ -72,11 +72,11 @@ function scrollPic() {
         if (square > ols.length - 1) {
             square = 0;
         }
-        for (var i = 0; i < ols.length; i++) // 先清除所有的
+        for (let i = 0; i < ols.length; i++) // 先清除所有的
         {
             ols[i].className = "";
         }
-        console.log("最初", square);
+        // console.log("最初", square);
         ols[square].className = "now"; // 留下当前的
     }, 3000);
 
@@ -104,7 +104,7 @@ function scrollPic() {
      */
     imgBox.addEventListener("touchstart", function(e) {
         console.log("开始");
-        var event = e || window.event;
+        let event = e || window.event;
         //记录开始滑动的位置
         startX = event.touches[0].clientX;
     }, false);
@@ -113,7 +113,7 @@ function scrollPic() {
      */
     imgBox.addEventListener("touchmove", function(e) {
         console.log("move");
-        var event = e || window.event;
+        let event = e || window.event;
         event.preventDefault();
 
         //清除定时器
@@ -155,12 +155,12 @@ function scrollPic() {
             if (square > ols.length - 1) {
                 square = 0;
             }
-            for (var i = 0; i < ols.length; i++) // 先清除所有的
+            for (let i = 0; i < ols.length; i++) // 先清除所有的
             {
                 ols[i].className = "";
             }
-            console.log("最初", square);
-            ols[square].className = "now"; // 留下当前的
+            // console.log("最初", square);
+            // ols[square].className = "now"; // 留下当前的
             addTransition();
             setTransfrom(-indexx * width);
 

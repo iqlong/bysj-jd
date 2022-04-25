@@ -1,10 +1,13 @@
 const express = require('express');
 const mysql = require('mysql');
 const common = require('../libs/common');
+const jwt = require('jsonwebtoken')
+const secretKey = 'happy everyday!'
 const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'huangche201314',
+    // password: 'huangche201314',
+    password: '118097',
     database: 'myigou'
 });
 module.exports = () => {
@@ -114,10 +117,14 @@ module.exports = () => {
         let hot = req.query.hot;
         let priceUp = req.query.priceUp;
         let priceDown = req.query.priceDown;
-        const keywordStr = `select  *  from product,shop where product.shop_id=shop.shop_id and product.product_name like '%${keyWord}%'`;
-        const hotStr = `select  *  from product,shop where product.shop_id=shop.shop_id and product.product_name like '%${keyWord}%' order by product_comment_num desc`;
-        const priceUpStr = `select  *  from product,shop where product.shop_id=shop.shop_id and product.product_name like '%${keyWord}%' order by product_uprice asc`;
-        const priceDownStr = `select  *  from product,shop where product.shop_id=shop.shop_id and product.product_name like '%${keyWord}%' order by product_uprice desc`;
+        const keywordStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
+                product.product_name like '%${keyWord}%'`;
+        const hotStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
+                product.product_name like '%${keyWord}%' order by product_comment_num desc`;
+        const priceUpStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
+                product.product_name like '%${keyWord}%' order by product_uprice asc`;
+        const priceDownStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
+                product.product_name like '%${keyWord}%' order by product_uprice desc`;
         if (keyWord != '') {
             if (hot != '') {
                 getSearchDatas(hotStr, res);
@@ -129,7 +136,6 @@ module.exports = () => {
                 getSearchDatas(keywordStr, res);
             }
         }
-
     });
     /**
         get search datas
@@ -177,15 +183,8 @@ module.exports = () => {
         })
     };
     route.post('/login', (req, res) => {
-
-        let mObj = {};
-        for (let obj in req.body) {
-            mObj = JSON.parse(obj);
-            console.log(mObj);
-        }
-        let username = mObj.loginName;
-        let password = common.md5(mObj.loginPawd + common.MD5_SUFFXIE);;
-        // console.log(username, mObj.passwd);
+        let username = req.body.loginName;
+        let password = common.md5(req.body.loginPawd + common.MD5_SUFFXIE);
         const selectUser = `SELECT * FROM user where user_name='${username}'`;
         db.query(selectUser, (err, data) => {
             if (err) {
@@ -195,20 +194,85 @@ module.exports = () => {
                 if (data.length == 0) {
                     res.send({ 'msg': '该用户不存在', 'status': -1 }).end();
                 } else {
-                    let dataw = data[0];
-                    //login sucess
-                    if (dataw.login_password === password) {
-                        //save the session 
-                        req.session['user_id'] = dataw.user_id;
-                        dataw.msg = "登录成功";
-                        dataw.status = 1;
-                        res.send(dataw).end();
+                    let userSearched = data[0];
+                    //login success
+                    if (userSearched.login_password === password) {
+                        //save the session
+                        // req.session['user_id'] = userSearched.user_id;
+                        const tokenStr = jwt.sign({...userSearched}, secretKey, {expiresIn: '24h'});
+                            // 加上感觉耦合性变高了
+                        // userSearched.msg = "登录成功";
+                        // userSearched.status = 1;
+                        res.send({
+                            msg: '登录成功',
+                            status: 1,
+                            userSearched,
+                            token: 'Bearer '+tokenStr
+                        }).end();
                     } else {
                         res.send({ 'msg': '密码不正确', 'status': -2 }).end();
                     }
                 }
             }
         });
+
+    });
+    route.get('/logout', (req, res) => {
+        // const tokenStr = jwt.sign({}, secretKey, {expiresIn: '0s'});
+        res.send({
+            // token: tokenStr,
+            msg: '退出成功',
+            status: 0
+        }).end();
+
+    });
+    route.post('/changePwd', (req, res) => {
+        // 根据名字查找用户，要是密码改变了，就修改库表
+        let username = req.body.username;
+        let password = common.md5(req.body.password + common.MD5_SUFFXIE);
+        const getPwd = `SELECT login_password FROM user where user_name='${username}'`;
+        const setPwd = `UPDATE user set login_password='${password}' WHERE user_name='${username}'`;
+        // 简单的实现角色功能 --- 权限问题
+        if(req.user['user_name'] !== username){
+            res.send({
+                msg: '权限不够',
+                status: 403
+            })
+        }else {
+            // 然后退出登录    前端中调用接口
+            db.query(getPwd,(err, data) => {
+                if(err){
+                    console.log(err);
+                    res.send({
+                        msg: 'sql查询错误',
+                        status: 'sql500'
+                    }).end();
+                }else {
+                    if(data.length === 0){
+                        res.send({
+                            msg: '没有此用户',
+                            status: 204
+                        })
+                    }else {
+                        if(data[0]['login_password'] === password){
+                            res.send({
+                                msg: '密码未更改',
+                                status: 304,
+                            })
+                        }else {
+                            db.query(setPwd,(err, data) => {
+                                console.log('g')
+                                res.send({
+                                    msg: '密码已修改',
+                                    status: 200
+                                })
+                            })
+                        }
+                    }
+                }
+            })
+        };
+
 
     });
     route.get('/userinfo', (req, res) => {

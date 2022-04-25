@@ -2,7 +2,6 @@
   <div class="footer">
   	<footer class="fixBottomBox">
         <ul>
-           
             <router-link tag="li" to="/home" class="tabItem">
             	<a href="javascript:;" class="tab-item-link">
                     <img src="../assets/images/a-home.png" alt="" class="tab-item-icon">
