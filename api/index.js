@@ -1,15 +1,8 @@
 const express = require('express');
-const mysql = require('mysql');
 const common = require('../libs/common');
 const jwt = require('jsonwebtoken')
 const secretKey = 'happy everyday!'
-const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    // password: 'huangche201314',
-    password: '118097',
-    database: 'myigou'
-});
+const db = require('../back_end/db/index');
 module.exports = () => {
     const route = express.Router();
     const getHomeStr = `SELECT product_id,product_name,product_price,product_img_url,product_uprice FROM product`;

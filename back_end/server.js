@@ -50,7 +50,7 @@ server.all('*', function(req, res, next) {
 
 
 //deal router
-server.use('/', require('./api/index.js')());
+server.use('/', require('../api')());
 
 server.use((err,req,res,next) => {
     if(err.name === 'UnauthorizedError') {
