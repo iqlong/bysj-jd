@@ -6,6 +6,7 @@
    其中home页面包括的组件：
    1.1 头部:     component/HomeHeaderView
    1.2 轮播图:   component/HomeBannerView
+   
    1.3 导航:     component/HomeNavView
    1.4 商品区:   component/HomeMainView
 2. 其中App.vue的作用
@@ -19,8 +20,15 @@
 3. 貌似是vuex中的error：sub is not a function
    vue devtool的新版本，导致页面的跳转问题
 4. $route的watch的问题
-5. 将接口部分模块化一下
+5. 将接口部分(back_end)模块化一下
    + node环境中我放弃了commonJs和Es6 Module的混合使用
+   + 其中的大概的结构
+      + 分为几个文件夹： db, router_handler, router, schema几个文件夹   server.js
+      + 其实就是将接口文件： server.js 模块化，
+         + db：                中放数据库相关的东西
+         + routerHandler：     放路由需要的函数
+         + router：            路由级别中间件
+         + server.js：         nodeJs接口的入口文件
 
 !!! 拦截器和已修改的多次输出问题
 这个就需要看 Event和EvenTarget.dispatchEvent  和  事件的后面的实现细节 --》 箭头函数中的e*
