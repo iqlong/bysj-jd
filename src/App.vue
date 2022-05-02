@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-  <loading v-show="loading"></loading>
-  <router-view></router-view>
-  <!-- router-link在下面这个组件中 -->
-  <NavBottomView v-show="shownav"></NavBottomView>
+    <loading v-show="loading"></loading>
+    <router-view></router-view>
+    <!-- router-link在下面这个组件中 -->
+    <NavBottomView v-show="shownav"></NavBottomView>
   </div>
 </template>
 

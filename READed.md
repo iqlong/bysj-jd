@@ -1,5 +1,9 @@
 ## 我阅读之后的
-
+1. 这个项目用的webpack太老了
+   build出来的东西完全看不了，一些HtmlWebpackPlugin，CopyWebpackPlugin都不敢乱加
+2. searchPage中css改less，直接爆炸
+   还是以项目结构为主
+3.
 ### 项目中组件的架构
 
 1. 首页就是home组件的页面  component/Home.vue
@@ -28,6 +32,7 @@
          + db：                中放数据库相关的东西
          + routerHandler：     放路由需要的函数
          + router：            路由级别中间件
+         + schema：            存放验证信息
          + server.js：         nodeJs接口的入口文件
 
 !!! 拦截器和已修改的多次输出问题

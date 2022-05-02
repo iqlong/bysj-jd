@@ -49,7 +49,7 @@ function getCateGoods(sql, res) {
 /**
  * get search datas
  */
-function getSearchData(keywordStr, res) {
+function getSearchData(keywordStr, res,str) {
     db.query(keywordStr, (err, data) => {
         if (err) {
             console.log(err);

@@ -11,14 +11,16 @@
         <el-popover v-show="userImg"
             placement="top"
             width="160"
-            trigger="click"
+            trigger="hover"
             v-model="visible">
           <el-button size="mini" type="text" @click="visible = false; centerDialogVisible=true">修改密码</el-button>
           <br>
           <!-- 对dialog的二次封装，看下原生的element的封装 -->
           <!-- v3 -->
           <el-button size="mini" type="text" @click="visible = false; logoutConfirmDialog=true">退出登录</el-button>
-          <img slot="reference" :src="userImg" alt="">
+          <template #reference>
+            <img :src="userImg" alt="">
+          </template>
         </el-popover>
       </div>
     </header>
@@ -72,7 +74,7 @@ sessionStorage.setItem = function(key, newValue){
   originalSetItem.apply(this,arguments);
 }
 
-import PackagedDialog from "./generalComp/PackagedDialog.vue";
+import PackagedDialog from "../generalComp/PackagedDialog.vue";
 export default {
   components: {
     PackagedDialog

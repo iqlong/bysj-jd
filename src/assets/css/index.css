@@ -13,6 +13,7 @@ body {
     height: 1000px;
 }
 
+/* 头部区域 */
 .m_header {
     position: fixed;
     left: 0;
@@ -53,6 +54,7 @@ body {
     width: 100%;
     height: 30px;
     border-radius: 15px;
+    text-indent: 14px;
     margin-top: 5px;
     padding-left: 30px;
 }

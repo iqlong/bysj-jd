@@ -71,6 +71,19 @@ if (process.env.NODE_ENV === 'production') {
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
-        })
+        }),
+        //以下配置的index.html在src目录内
+        // new HtmlWebpackPlugin({
+        //     filename: 'index.html',
+        //     template: 'index.html',
+        //     inject: true,
+        //     favicon: path.resolve('favicon.ico') // 在此处设置
+        // }),
+        // new CopyWebpackPlugin([
+        //     {
+        //         from: path.resolve(__dirname, './src/logo.ico'),
+        //         to: path.resolve(__dirname, './dist/assets')
+        //     }
+        // ])
     ])
 }

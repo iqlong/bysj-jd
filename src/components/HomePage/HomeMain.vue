@@ -4,14 +4,14 @@
                 <section class="product_box">
                     <div class="product_top">
                         <a href="#" class="product_left">
-                            <img src="../assets/images/jd_skill.png" alt="" class="miaosha_icon">
+                            <img src="../../assets/images/jd_skill.png" alt="" class="miaosha_icon">
                             <strong class="dianshu">六点场</strong>
                             <span class="time">00:21:43</span>
                         </a>
                     </div>
                     <div class="product_content">
                         <ul>
-                        
+
                             <li class="product_skill_item" v-for="item in homeDatas">
                                 <router-link :to="'/detail/'+item.product_id" class="product_skill_item_link">
                                     <img v-lazy="item.product_img_url" alt="" class="product_skill_item_cion lazy-img-fadein">
@@ -25,7 +25,7 @@
                                     </p>
                                 </router-link>
                             </li>
-                        
+
                         </ul>
                     </div>
                 </section>
@@ -50,7 +50,7 @@
                                         </div>
                                     </router-link>
                                 </li>
-                        
+
                             </ul>
                         </div>
                     </div>
@@ -87,6 +87,6 @@
 </script>
 <style>
     img[lazy=error] {
-    background: url('../assets/images/err.png');
+    background: url('../../assets/images/err.png');
   }
 </style>

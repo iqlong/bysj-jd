@@ -17,7 +17,7 @@
     import HomeBannerView from './HomeBanner.vue';
     import HomeNavView from './HomeNav.vue';
     import HomeMainView from './HomeMain.vue';
-    import {bindEvent,scrollPic} from '../assets/js/index.js'
+    import {bindEvent,scrollPic} from '../../assets/js'
     export default{
        components:{
         HomeHeaderView,
@@ -34,11 +34,12 @@
 </script>
 <style  lang="css">
 /* 这种引入方式相当于发请求，scoped没有效果，需要写在src中 */
-@import '../assets/css/index.css';
+        /* 根据我的实践：还是有效果的 */
+  @import '../../assets/css/index.css';
 </style>
 <style  lang="less">
   body .el-popover{
-    left: 1134px !important;
+    left: 1121px !important;
     width: auto !important;
     min-width: 0;
     .popper__arrow {

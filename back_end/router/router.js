@@ -78,8 +78,10 @@ route.get('/search', (req, res) => {
             product.product_name like '%${keyWord}%'`;
     const hotStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
             product.product_name like '%${keyWord}%' order by product_comment_num desc`;
-    const priceUpStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
-            product.product_name like '%${keyWord}%' order by product_uprice asc`;
+    const priceUpStr = `select  *  from product,shop
+                        where product.shop_id=shop.shop_id 
+                            and product.product_name like "%${keyWord}%"
+                        order by product_uprice asc`;
     const priceDownStr = `select  *  from product,shop where product.shop_id=shop.shop_id and 
             product.product_name like '%${keyWord}%' order by product_uprice desc`;
     if (keyWord != '') {

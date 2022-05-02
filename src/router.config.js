@@ -1,4 +1,4 @@
-import Home from './components/Home.vue'
+import Home from './components/HomePage/Home.vue'
 import Category from './components/Category.vue'
 import Cart from './components/Cart.vue'
 import GoodsDetail from './components/GoodsDetail.vue'
