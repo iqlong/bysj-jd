@@ -1,7 +1,7 @@
 <template>
 	<div class="home">
 		<div class="m_layout">
-            <!-- 头部区 -->
+            <!-- 头部搜索区 -->
            <HomeHeaderView></HomeHeaderView>
             <!-- 轮播图-->
             <HomeBannerView></HomeBannerView>

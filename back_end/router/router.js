@@ -54,21 +54,77 @@ route.get('/detail', (req, res) => {
 
 });
 route.get('/cart', (req, res) => {
-    const cartStr = "SELECT cart_id,user.user_id,product.product_id,product_name,product_uprice,product_img_url,goods_num,product_num,shop_name FROM product,user,goods_cart,shop where product.product_id=goods_cart.product_id and user.user_id=goods_cart.user_id and shop.shop_id = product.shop_id";
+    const cartStr = "SELECT cart_id,user.user_id,product.product_id," +
+        "product_name,product_uprice,product_img_url,goods_num,product_num,shop_name FROM product,user," +
+        "goods_cart,shop where product.product_id=goods_cart.product_id and user.user_id=goods_cart.user_id " +
+        "and shop.shop_id = product.shop_id";
     db.query(cartStr, (err, data) => {
         if (err) {
             console.log(err);
             res.status(500).send('database err').end();
         } else {
             if (data.length == 0) {
-                res.status(500).send('no datas').end();
+                res.status(200).send({
+                    msg: 'no datas',
+                    status: 'null'
+                }).end();
             } else {
                 res.send(data);
             }
         }
     });
 })
+route.post('/pay',(req,res) => {
+    let deleteArr=req.body.selectBuy,n=0;
+    let len=deleteArr.length;
+    let payStr = `delete from goods_cart where product_id in (`;
+    while(1){
+        n++;
+        if(n==len){
+            payStr+=`${deleteArr[n-1]});`;
+            break;
+        }else {
+            payStr+=`${deleteArr[n-1]},`
+        }
+    }
+    console.log(deleteArr,payStr)
+    // db.query('SET FOREIGN_KEY_CHECKS=0;'+payStr+'SET FOREIGN_KEY_CHECKS=1;',(err,data)=>{
+    // db.query('SET FOREIGN_KEY_CHECKS = 0;',(err) => {
+    //     if(err){
+    //         console.log(err)
+    //     }else {
+    //         console.log('取消主键ok')
+    //     }
+    // })
+    db.query(payStr,(err,data)=>{
+            if(err){
+            console.log(err);
+            res.send({ 'msg': '服务器出错', 'status': 0 }).end();
+        }else {
+            res.send({
+                msg: '付款成功',
+                status: 1
+            })
+        }
+    })
 
+})
+
+route.post('/changeGN',(req,res) => {
+    let ifAdd=req.body.ifAdd,pId=req.body.pId
+    const operateStr= `Update goods_cart set goods_num=goods_num${ifAdd?'+':'-'}1
+                            where product_id=${pId};`;
+    db.query(operateStr,(err) => {
+        if (err){
+            console.log(err);
+        }else {
+            res.send({
+                msg: 'num修改成功',
+                status: '00'
+            })
+        }
+    })
+})
 route.get('/search', (req, res) => {
     let keyWord = req.query.kw;
     let hot = req.query.hot;
@@ -101,16 +157,29 @@ route.get('/search', (req, res) => {
  *user reg func
  */
 route.post('/reg', (req, res) => {
-
-    let mObj = {};
-    for (let obj in req.body) {
-        mObj = JSON.parse(obj);
-    }
-    let regName = mObj.regName;
-    let regPasswd = mObj.regPasswd;
-    regPasswd = common.md5(regPasswd + common.MD5_SUFFXIE);
-    const insUserInfo = `INSERT INTO user(user_name,login_password,user_number) VALUES('${regName}','${regPasswd}','${regName}')`;
-    routerHandler.delReg(insUserInfo, res);
+    let regName = req.body.regName;
+    let regPasswd = req.body.regPasswd
+    let selectU = `SELECT * FROM user where user_name='${regName}'`
+    db.query(selectU,(err,data) => {
+        if(err){
+            console.log(err);
+            res.send({ 'msg': '服务器出错', 'status': 0 }).end();
+        }else {
+            if(data.length == 0){
+                regPasswd = common.md5(regPasswd + common.MD5_SUFFXIE);
+                const insUserInfo = `INSERT INTO user(user_name,login_password,user_number,
+                        user_photo) VALUES('${regName}','${regPasswd}','${regName}',
+                        'https://iqlong.github.io/staticBysj/pigHead.jpg')`;
+                routerHandler.delReg(insUserInfo, res);
+            }else {
+                console.log('用户存在了')
+                res.send({
+                    'msg': '用户已存在',
+                    'status': -1
+                })
+            }
+        }
+    })
 });
 
 route.post('/login', (req, res) => {
@@ -131,9 +200,6 @@ route.post('/login', (req, res) => {
                     //save the session
                     // req.session['user_id'] = userSearched.user_id;
                     const tokenStr = jwt.sign({...userSearched}, secretKey, {expiresIn: '24h'});
-                    // 加上感觉耦合性变高了
-                    // userSearched.msg = "登录成功";
-                    // userSearched.status = 1;
                     res.send({
                         msg: '登录成功',
                         status: 1,

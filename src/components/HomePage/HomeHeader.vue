@@ -96,9 +96,8 @@ export default {
     // 需要使用setItem等方法才可以监听到事件
     window.addEventListener("setItemEvent",function (e) {
       _this.userInfo = e.newValue;
-      // console.log('修改了')
+      console.log('修改了')
       e.stopPropagation();
-
     });
   },
   computed:{

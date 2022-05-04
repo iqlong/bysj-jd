@@ -16,8 +16,9 @@ server.use(cors());
 server.use(expressJwt({
     secret: secretKey,
     algorithms: ['HS256']
-}).unless({path:['/login','/home','/search']}))
-    // .unless({path:[/^\/.*/]}))
+}).unless({path:['/login','/home','/search','/reg','/cart']}))
+
+// .unless({path:[/^\/.*/]}))
 
 //the cores config
 server.all('*', function(req, res, next) {

@@ -4,5 +4,7 @@ module.exports = mysql.createPool({
     user: 'root',
     // password: 'huangche201314',
     password: '118097',
+    // database: 'bysj',
     database: 'myigou'
+
 })

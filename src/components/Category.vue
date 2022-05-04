@@ -1,7 +1,7 @@
 <template>
 	<div id="category">
 		<CategoryHeadView></CategoryHeadView>
-	    <CategoryMainView></CategoryMainView>
+    <CategoryMainView></CategoryMainView>
 	</div>
 </template>
 <script>
@@ -20,6 +20,6 @@
 	}
 </script>
 
-<style> 
+<style>
 @import '../assets/css/category.css';
 </style>

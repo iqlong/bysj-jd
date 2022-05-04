@@ -19,10 +19,10 @@ export default {
     $route(to,from){
       if(to.path.indexOf('detail')!=-1){
         this.$store.dispatch('hideNav');
-        console.log(to.path.indexOf('detail'),"-----");
+        // console.log(to.path.indexOf('detail'),"-----");
       }else{
         this.$store.dispatch('showNav');
-        console.log(to.path.indexOf('detail'),"==========");
+        // console.log(to.path.indexOf('detail'),"==========");
       }
       if(to.path == '/cart' || to.path == '/search' || to.path == '/login' || to.path == '/register'){
         this.$store.dispatch('hideNav');

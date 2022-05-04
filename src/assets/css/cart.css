@@ -47,18 +47,21 @@ body {
     display: block;
     width: 20px;
     height: 20px;
-    background: url("../images/shop-icon.png") no-repeat;
+    background: url("../images/shop-icon.png") no-repeat 0 0;
     background-size: 50px 100px;
-    background-position: 0 0;
     position: absolute;
     left: 6px;
     top: 12px;
 }
 
-.check_box[checked] {
+/*.check_box[checked] {*/
+/*    background-position: -25px 0;*/
+/*}*/
+.check_box.checked {
     background-position: -25px 0;
 }
 
+/* 元素目前不显示*/
 .cart_check_box {
     width: 40px;
     height: 40px;

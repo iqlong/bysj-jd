@@ -9,7 +9,6 @@ import store from './store/'
 import VueLazyload from 'vue-lazyload'
 import App from './App.vue'
 import Loading from './components/loading'
-require('./assets/css/base.css'); //全局引入
 // Vue.use(Less);
 Vue.use(VueRouter);
 Vue.use(ElementUI)
@@ -25,11 +24,10 @@ const router = new VueRouter({
     mode: 'history',
     scorllBehavior: () => ({
         y: 0
-
     }),
     routes
 });
-
+Vue.config.productionTip = false
 Vue.prototype.$http = http;
 // Vue原型上加设置了时间的element message
 Vue.prototype.$durationMes=function (option){
@@ -56,9 +54,7 @@ router.beforeEach((to, from, next) => {
                 query: { redirect: to.fullPath }
             });
         }
-        console.log("================");
     } else {
-        console.log("nnnnnnnnnnnnnnnnnn");
         next();
     }
 });
@@ -66,5 +62,8 @@ new Vue({
     el: '#app',
     router,
     store,
+    beforeCreate() {
+        Vue.prototype.$bus = this;
+    },
     render: h => h(App)
 })

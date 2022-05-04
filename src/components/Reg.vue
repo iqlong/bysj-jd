@@ -36,11 +36,20 @@
 			goSearch(){
 				let _this = this;
 				if(_this.regname ==''){
-					alert('请输入手机号');
+          this.$durationMes({
+            message: '请输入手机号',
+            type: 'warning'
+          })
 				}else if(_this.regpasswd == '' || _this.regpasswd_ag == ''){
-					alert('请输入密码');
+          this.$durationMes({
+            message: '请输入密码',
+            type: 'warning'
+          })
 				}else if(_this.regpasswd!==_this.regpasswd_ag){
-					alert('两次输入的密码不一致');
+          this.$durationMes({
+            message: '两次输入的密码不一致',
+            type: 'warning'
+          })
 				}else{
 					_this.$http.post('/reg',{
 						regName:_this.regname,
@@ -48,21 +57,28 @@
 				}).then((res)=>{
 					if(res.status == 200){
 						_this.regInfo = res.data;
+						debugger
 						if(_this.regInfo.status == 1){
 							//reg success, go to this login page
 							window.history.go(-1);
 						}else{
-							alert('注册失败');
+							this.$durationMes({
+                message: _this.status.msg,
+                type: 'warning'
+              })
 						}
 					}else{
-						alert('出现错误');
+						this.$durationMes({
+              message: '出现错误',
+              type: 'error'
+            })
 					}
 					console.log(res);
 				},(err)=>{
 					console.log(err);
 				});
 				}
-				
+
 			}
 		}
 	}
