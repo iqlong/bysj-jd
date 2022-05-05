@@ -2,7 +2,14 @@
   <div class="home_h">
     <header class="m_header">
       <div class="m_header_box" id="my_search">
-        <a href="#" class="icon_logo"></a>
+        <a href="#" class="icon_logo">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-fenqishangcheng "></use>
+          </svg>
+          <!--<svg class="icon" aria-hidden="true">-->
+          <!--  <use xlink:href="#icon-shangcheng1"></use>-->
+          <!--</svg>-->
+        </a>
         <form action="#">
           <span class="icon_search"></span>
           <input type="search" class="search" placeholder="点击搜索" @click="goSearch($event)">
@@ -124,22 +131,19 @@ export default {
       }).then((res) =>{
         // 新旧密码一样
         if(res.data.status == 304){
-          this.$durationMes({
+          this.$durationMes.warning({
             message: res.data.msg,
-            type: 'warning'
           })
         //  密码不一样，修改之后需要退出登录
         }else if(res.data.status == 200){
-          this.$durationMes({
+          this.$durationMes.success({
             message: res.data.msg,
-            type: 'success'
           });
           this.logoutConfirm();
         //  一些其他的问题
         }else{
-          this.$durationMes({
+          this.$durationMes.error({
             message: res.data.msg,
-            type: 'error'
           });
         };
       })
@@ -159,14 +163,12 @@ export default {
           localStorage.setItem('token',null);
           // ''不可以用parse()，null可以，但是sessionStorage只可以存储JSON
           sessionStorage.setItem('userInfo',undefined);
-          this.$durationMes({
+          this.$durationMes.success({
             message: '已退出登录',
-            type: 'success',
           })
         }else {
-          this.$durationMes({
+          this.$durationMes.warning({
             message: '退出登录失败',
-            type: 'warning'
           })
         }
       })

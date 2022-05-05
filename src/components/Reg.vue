@@ -2,7 +2,7 @@
 	<div class="m_r">
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
-		    <h3 class="cartname">京东注册</h3>
+		    <h3 class="cartname">注册</h3>
 		</header>
 		<main class="user_login_box">
 		    <div class="login_dialog">
@@ -36,19 +36,16 @@
 			goSearch(){
 				let _this = this;
 				if(_this.regname ==''){
-          this.$durationMes({
+          this.$durationMes.warning({
             message: '请输入手机号',
-            type: 'warning'
           })
 				}else if(_this.regpasswd == '' || _this.regpasswd_ag == ''){
-          this.$durationMes({
+          this.$durationMes.warning({
             message: '请输入密码',
-            type: 'warning'
           })
 				}else if(_this.regpasswd!==_this.regpasswd_ag){
-          this.$durationMes({
+          this.$durationMes.warning({
             message: '两次输入的密码不一致',
-            type: 'warning'
           })
 				}else{
 					_this.$http.post('/reg',{
@@ -62,15 +59,13 @@
 							//reg success, go to this login page
 							window.history.go(-1);
 						}else{
-							this.$durationMes({
+							this.$durationMes.warning({
                 message: _this.status.msg,
-                type: 'warning'
               })
 						}
 					}else{
-						this.$durationMes({
+						this.$durationMes.error({
               message: '出现错误',
-              type: 'error'
             })
 					}
 					console.log(res);

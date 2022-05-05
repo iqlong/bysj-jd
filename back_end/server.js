@@ -13,10 +13,10 @@ const secretKey = 'happy everyday!'
 server.use(express.json())
 server.use(express.urlencoded({ extended: false }));
 server.use(cors());
-server.use(expressJwt({
-    secret: secretKey,
-    algorithms: ['HS256']
-}).unless({path:['/login','/home','/search','/reg','/cart']}))
+// server.use(expressJwt({
+//     secret: secretKey,
+//     algorithms: ['HS256']
+// }).unless({path:['/login','/home','/search','/reg','/cart']}))
 
 // .unless({path:[/^\/.*/]}))
 

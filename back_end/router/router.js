@@ -5,7 +5,7 @@ const secretKey = 'happy everyday!'
 const route = express.Router();
 const routerHandler = require('../router_handler/routeHandler')
 const db = require('../db/index');
-
+const expressJwt = require('express-jwt')
 
 const getHomeStr = `SELECT product_id,product_name,product_price,product_img_url,product_uprice FROM product`;
 const getCateNames = `SELECT * FROM category ORDER BY category_id desc`;
@@ -74,7 +74,19 @@ route.get('/cart', (req, res) => {
         }
     });
 })
+
+route.post('/pay',
+    expressJwt({
+        secret: secretKey,
+        algorithms: ['HS256']
+    })
+
+)
 route.post('/pay',(req,res) => {
+    expressJwt({
+        secret: secretKey,
+        algorithms: ['HS256']
+    })
     let deleteArr=req.body.selectBuy,n=0;
     let len=deleteArr.length;
     let payStr = `delete from goods_cart where product_id in (`;

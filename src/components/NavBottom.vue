@@ -19,14 +19,14 @@
                   <div class="text"  :class="{active:iconSelected('catgory',false)}">分类</div>
                 </div>
             </router-link>
-            <router-link tag="li" to="/find" class="tabItem">
-                <div class="tab-item-link" @click="changeSp('find')">
-                  <svg class="icon" aria-hidden="true">
-                    <use v-bind:xlink:href="iconSelected('find',true)"></use>
-                  </svg>
-                  <div class="text"  :class="{active:iconSelected('find',false)}">发现</div>
-                </div>
-            </router-link>
+            <!--<router-link tag="li" to="/find" class="tabItem">-->
+            <!--    <div class="tab-item-link" @click="changeSp('find')">-->
+            <!--      <svg class="icon" aria-hidden="true">-->
+            <!--        <use v-bind:xlink:href="iconSelected('find',true)"></use>-->
+            <!--      </svg>-->
+            <!--      <div class="text"  :class="{active:iconSelected('find',false)}">发现</div>-->
+            <!--    </div>-->
+            <!--</router-link>-->
             <router-link tag="li" to="/cart" class="tabItem">
                 <div class="tab-item-link" @click="changeSp('cart')">
                   <svg class="icon" aria-hidden="true">

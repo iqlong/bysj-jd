@@ -5,7 +5,7 @@
                     <li class="nav_item">
                         <a href="#" class="nav_item_link">
                             <img src="../../assets/images/nav0.png" alt="">
-                            <span>京东超市</span>
+                            <span>网上超市</span>
                         </a>
                     </li>
                     <li class="nav_item">
@@ -23,13 +23,13 @@
                     <li class="nav_item">
                         <a href="#" class="nav_item_link">
                             <img src="../../assets/images/nav3.png" alt="">
-                            <span>京东生鲜</span>
+                            <span>网上生鲜</span>
                         </a>
                     </li>
                     <li class="nav_item">
                         <a href="#" class="nav_item_link">
                             <img src="../../assets/images/nav4.png" alt="">
-                            <span>京东到家</span>
+                            <span>快递到家</span>
                         </a>
                     </li>
                     <li class="nav_item">

@@ -2,7 +2,7 @@
   <div class="my_l">
     <header class="top_bar">
       <a @click="goWhichPath" class="icon_back"></a>
-      <h3 class="cartname">京东登录</h3>
+      <h3 class="cartname">登录</h3>
     </header>
     <main class="user_login_box">
       <div class="login_dialog">
@@ -43,14 +43,12 @@ export default {
     goLogin() {
       let _this = this;
       if (_this.username == '') {
-        this.$durationMes({
+        this.$durationMes.warning({
           message: '请输入用户名',
-          type: 'warning'
         })
       } else if (_this.password == '') {
-        this.$durationMes({
+        this.$durationMes.warning({
           message: '请输入密码',
-          type: 'warning'
         })
       } else {
         _this.$http.post('/login', {

@@ -106,9 +106,8 @@ export default {
       this.upPrice=0;
       let _this = this;
       if (_this.keyword == '') {
-        this.$durationMes({
+        this.$durationMes.warning({
           message: '请输入商品名称',
-          type: 'alert'
         })
       } else {
         _this.$http.get('/search', {
@@ -129,9 +128,8 @@ export default {
       this.screenWord = 'price'
       this.upPrice=!this.upPrice;
       if (this.keyword == '') {
-        this.$durationMes({
+        this.$durationMes.warning({
           message: '请输入商品名称',
-          type: 'alert'
         })
       } else {
         this.$http.get('/search', {
