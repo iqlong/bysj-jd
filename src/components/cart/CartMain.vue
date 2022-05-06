@@ -1,8 +1,7 @@
 <template>
   <div>
     <main class="cart_box">
-      <div  v-show="$store.state.mutations.userInfo!==undefined &&
-            Object.keys($store.state.mutations.userInfo)!=[]" class="cart_tip clearfix">
+      <div  v-if="!token||token=='null'" class="cart_tip clearfix">
         <span>登录后可同步电脑与手机购物车中的商品</span>
         <a href="#"
            class="login" @click="$router.push('/login')">登录</a>
@@ -17,7 +16,7 @@
             <!--</div>-->
           </div>
           <div class="shop_info clearfix">
-            <img src="../assets/images/buy-logo.png" alt="" class="shop_icon">
+            <img src="../../assets/images/buy-logo.png" alt="" class="shop_icon">
             <span class="shop_name">{{item.shop_name}}</span>
           </div>
           <div class="cart_free clearfix">
@@ -110,6 +109,7 @@
 	export default{
 		data(){
 			return{
+			  token: window.localStorage.token,
 				cartDatas:[],
         selectBuy:[],
 
@@ -118,14 +118,17 @@
 			}
 		},
     computed:{
-		  allMoney(){
-		    let sumM=0;
-		    this.cartDatas.filter((item) => {
-		      return item.checked==true;
-        }).forEach((item) => {
-          sumM+=item['product_uprice']*item['goods_num'];
-        })
-        return sumM
+		  allMoney:{
+		    get(){
+          let sumM=0;
+          this.cartDatas.filter((item) => {
+            return item.checked==true;
+          }).forEach((item) => {
+            sumM+=item['product_uprice']*item['goods_num'];
+          })
+          return sumM
+        },
+
       }
     },
 		mounted(){
@@ -146,7 +149,7 @@
             // })
             // 后端返回的数据不好，自己加一点
             // this.cartDatas = Object.assign({},this.cartDatas,res.data);
-            if(this.cartDatas.length==0){
+            if(this.cartDatas.length==0 || this.cartDatas.length>res.data.length){
               this.cartDatas = res.data;
             }else {
               this.cartDatas.forEach((item,index) => {
@@ -199,21 +202,23 @@
         this.ifAll=!this.ifAll;
         // 如果是确定
         if(this.ifAll){
-          let sum=0;
           this.cartDatas.forEach((item) => {
-            if(!item.checked){
-              sum+=item['product_uprice']*item['goods_num'];
-            }
-            item.checked=true;
+            // if(!item.checked){
+            //   this.allMoney+=item['product_uprice']*item['goods_num'];
+            // }
+            this.$set(item,'checked',true)
             this.selectBuy.push(item['product_id'])
           })
-          this.$store.commit('addMoney',[sum,true]);
+
+          // this.$store.commit('addMoney',[sum,true]);
         }else {
           this.cartDatas.forEach((item) => {
             item.checked=false;
           })
           this.selectBuy=[];
-          this.$store.commit('moneyGoZero')
+          this.cartDatas.forEach((item) => {
+            item.checked=false
+          })
         }
       },
       confirmPay(){
@@ -225,7 +230,8 @@
             // 重新请求，更新数据
             this.selectBuy=[];
             this.getCartDatas().then(() => {
-              this.$store.commit('moneyGoZero');
+              // this.$store.commit('moneyGoZero');
+              // this.allMoney=0;
               this.centerDialogVisible = false;
               this.$durationMes.success({
                 message: '支付成功',

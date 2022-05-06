@@ -15,5 +15,5 @@
 	}
 </script>
 <style>
-@import '../assets/css/mine.css';
+@import '../../assets/css/mine.css';
 </style>

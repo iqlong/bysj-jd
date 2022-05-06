@@ -3,7 +3,7 @@
 		<div class="category_right">
 	            <div class="category_banner">
 	                <a href="#">
-	                    <img src="../assets/images/banner_1.png" alt="">
+	                    <img src="../../assets/images/banner_1.png" alt="">
 	                </a>
 	            </div>
 	            <div class="category_detail">
@@ -15,7 +15,7 @@
 	                            <p class="category_detail_item_name">{{item.product_name}}</p>
 	                        </router-link>
 	                    </li>
-	                
+
 	                </ul>
 	            </div>
 	        </div>
@@ -44,7 +44,7 @@ export default{
 		methods:{
 			fetchData(id){
 				var _this=this;
-				
+
 				_this.$http.get('/categorygoods',{
 					params: {
 						mId: id

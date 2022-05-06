@@ -37,7 +37,11 @@ export default {
   methods: {
     goWhichPath() {
       // popstate不可监听这个push事件
-      this.$router.push('/home')
+      if(!localStorage.token || localStorage.token=='null'){
+        history.go(-2)
+      }else{
+        this.$router.push('/home')
+      }
       // history.pushState('/home')
     },
     goLogin() {

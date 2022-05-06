@@ -7,3 +7,13 @@
 		</header>
 	</div>
 </template>
+<script>
+export default {
+  methods:{
+    goBack(){
+      // if(localStorage.token)
+    }
+  }
+}
+
+</script>

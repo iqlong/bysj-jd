@@ -5,7 +5,7 @@
 	</div>
 </template>
 <script>
-	import {myMoveScroll} from '../assets/js/category.js'
+	import {myMoveScroll} from '../../assets/js/category.js'
 	import CategoryHeadView from './CategoryHead.vue';
 	import CategoryMainView from './CategoryMain.vue';
 	export default{
@@ -21,5 +21,5 @@
 </script>
 
 <style>
-@import '../assets/css/category.css';
+@import '../../assets/css/category.css';
 </style>
