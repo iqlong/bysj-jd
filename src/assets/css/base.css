@@ -160,12 +160,20 @@ svg.icon{
 .textCenter{
     text-align: center;
 }
+.jstPointer{
+    cursor: pointer;
+}
 .pointerBox{
     cursor: pointer;
 }
 .pointerBox:hover{
-    background: #ea6d6d;
+    background-color: #ea6d6d !important;
 }
 .pointerBox:active{
-    background: red;
+    background-color: red !important;
+}
+.flexBox{
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }

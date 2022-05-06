@@ -51,7 +51,6 @@ route.get('/detail', (req, res) => {
             });
         }
     });
-
 });
 route.get('/cart', (req, res) => {
     const cartStr = "SELECT cart_id,user.user_id,product.product_id," +
@@ -74,7 +73,58 @@ route.get('/cart', (req, res) => {
         }
     });
 })
+route.post('/addCart',(req,res) => {
 
+    let {uId,pId,createTime: created} = req.body;
+    let insCartStr;
+    if(uId){
+        insCartStr=`insert into goods_cart (user_id,product_id,goods_num,created) 
+                            values(${uId},${pId},1,'${created}')`;
+    }else {
+        insCartStr=`insert into goods_cart (product_id,goods_num,created) 
+                            values(${pId},1,'${created}')`;
+    }
+
+    const selectStr=`select * from goods_cart where product_id=${pId}`;
+    db.query(selectStr,(err,data) => {
+        if(err){
+            console.log(err)
+            return res.send({
+                msg: '服务器错误',
+                status: '500'
+            })
+        }else{
+            let add;
+            if(data.length>0){
+                // goods_num ++
+                add=true;
+                db.query(`update goods_cart set goods_num=goods_num+1
+                            where product_id=${pId}`,(err) => {
+                    if (err){
+                        return res.send({
+                            msg: '服务器错误',
+                            status: '500'
+                        })
+                    }
+                })
+            }else {
+                db.query(insCartStr,(err)=>{
+                    if(err){
+                        return res.send({
+                            msg: '服务器错误',
+                            status: '500'
+                        })
+                    }
+                })
+            }
+            return res.send({
+                msg: add?'购物车数量加壹':'已添加购物车',
+                status: '00'
+            })
+        }
+    })
+})
+// 对接口进行token认证
 route.post('/pay',
     expressJwt({
         secret: secretKey,
@@ -83,43 +133,89 @@ route.post('/pay',
 
 )
 route.post('/pay',(req,res) => {
-    expressJwt({
-        secret: secretKey,
-        algorithms: ['HS256']
-    })
-    let deleteArr=req.body.selectBuy,n=0;
-    let len=deleteArr.length;
-    let payStr = `delete from goods_cart where product_id in (`;
-    while(1){
-        n++;
-        if(n==len){
-            payStr+=`${deleteArr[n-1]});`;
-            break;
-        }else {
-            payStr+=`${deleteArr[n-1]},`
-        }
-    }
-    console.log(deleteArr,payStr)
-    // db.query('SET FOREIGN_KEY_CHECKS=0;'+payStr+'SET FOREIGN_KEY_CHECKS=1;',(err,data)=>{
-    // db.query('SET FOREIGN_KEY_CHECKS = 0;',(err) => {
-    //     if(err){
-    //         console.log(err)
-    //     }else {
-    //         console.log('取消主键ok')
-    //     }
-    // })
-    db.query(payStr,(err,data)=>{
-            if(err){
+    let {money: payMoney,uId} = req.body;
+    const getBalance=`select balance from user where user_id=${uId}`
+    // 若是金额不足，那就直接res.send()
+    db.query(getBalance,(err,data)=>{
+        if(err){
             console.log(err);
-            res.send({ 'msg': '服务器出错', 'status': 0 }).end();
+            res.send({
+                msg:'sql语句问题'
+            })
+        }else {
+            const balance=data[0].balance;
+            if(payMoney>balance){
+                return res.send({
+                    msg:'余额不足，请充值',
+                    status: '01'
+                })
+            }else {
+                // 钱扣除了，在删除
+                const reduceMoney=`update user set balance=(balance-${payMoney}) where user_id=${uId}`;
+                db.query(reduceMoney,(err,data) => {
+                    if(err){
+                        console.log(err);
+                        res.end({
+                            msg: 'sql查询错误',
+                            status: '444'
+                        })
+                    }else {
+                        if(req.body.detail){
+                            res.send({
+                                msg: '付款成功',
+                                status: 1
+                            })
+                        }else {
+                            let deleteArr=req.body.selectBuy,n=0;
+                            let len=deleteArr.length;
+                            let payStr = `delete from goods_cart where product_id in (`;
+                            while(1){
+                                n++;
+                                if(n==len){
+                                    payStr+=`${deleteArr[n-1]});`;
+                                    break;
+                                }else {
+                                    payStr+=`${deleteArr[n-1]},`
+                                }
+                            }
+                            db.query(payStr,(err,data)=>{
+                                if(err){
+                                    console.log(err);
+                                    res.send({ 'msg': '服务器出错', 'status': 0 }).end();
+                                }else {
+                                    res.send({
+                                        msg: '付款成功',
+                                        status: 1
+                                    })
+                                }
+                            })
+                        }
+
+                    }
+                })
+            }
+        }
+
+    })
+})
+
+route.post('/delProduct',(req,res) => {
+    let{pId} = req.body;
+    const delStr = `delete from goods_cart where product_id=${pId}`;
+    db.query(delStr,(err)=>{
+        if(err){
+            console.log(err);
+            res.send({
+                msg: 'sql查询错误',
+                status: '444'
+            })
         }else {
             res.send({
-                msg: '付款成功',
-                status: 1
+                msg:'删除成功',
+                status: '00'
             })
         }
     })
-
 })
 
 route.post('/changeGN',(req,res) => {
@@ -137,6 +233,7 @@ route.post('/changeGN',(req,res) => {
         }
     })
 })
+
 route.get('/search', (req, res) => {
     let keyWord = req.query.kw;
     let hot = req.query.hot;
@@ -160,6 +257,7 @@ route.get('/search', (req, res) => {
         } else if (priceDown != '') {
             routerHandler.getSearchData(priceDownStr, res);
         } else {
+            // 正常返回库表中顺序
             routerHandler.getSearchData(keywordStr, res);
         }
     }
@@ -171,6 +269,7 @@ route.get('/search', (req, res) => {
 route.post('/reg', (req, res) => {
     let regName = req.body.regName;
     let regPasswd = req.body.regPasswd
+    let {address,tel,balance}=req.body;
     let selectU = `SELECT * FROM user where user_name='${regName}'`
     db.query(selectU,(err,data) => {
         if(err){
@@ -179,9 +278,9 @@ route.post('/reg', (req, res) => {
         }else {
             if(data.length == 0){
                 regPasswd = common.md5(regPasswd + common.MD5_SUFFXIE);
-                const insUserInfo = `INSERT INTO user(user_name,login_password,user_number,
-                        user_photo) VALUES('${regName}','${regPasswd}','${regName}',
-                        'https://iqlong.github.io/staticBysj/pigHead.jpg')`;
+                const insUserInfo = `INSERT INTO user(user_name,login_password,user_photo,balance,user_number,address)`+
+                    `VALUES('${regName}','${regPasswd}','https://iqlong.github.io/staticBysj/pigHead.jpg',`+
+                    `${balance?balance:2000},'${tel?tel:'18570552406'}','${address?address:'郴州市北湖区文化路'}')`;
                 routerHandler.delReg(insUserInfo, res);
             }else {
                 console.log('用户存在了')
@@ -270,7 +369,6 @@ route.post('/changePwd', (req, res) => {
                         })
                     }else {
                         db.query(setPwd,(err, data) => {
-                            console.log('g')
                             res.send({
                                 msg: '密码已修改',
                                 status: 200
@@ -286,7 +384,7 @@ route.post('/changePwd', (req, res) => {
 
 route.get('/userinfo', (req, res) => {
     let uId = req.query.uId;
-    const getU = `SELECT user_name,user_number FROM user where user_id='${uId}'`;
+    const getU = `SELECT * FROM user where user_id='${uId}'`;
     db.query(getU, (err, data) => {
         if (err) {
             console.log(err);

@@ -85,7 +85,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     img[lazy=error] {
     background: url('../../assets/images/err.png');
   }

@@ -55,7 +55,7 @@
             <div class="cart_del clearfix">
               <div class="del_top">
               </div>
-              <div class="del_bottom">
+              <div class="del_bottom pointerBox" @click="delProduct(item['product_id'])">
               </div>
             </div>
           </div>
@@ -142,13 +142,10 @@
             this.cartDatas = [];
 				    this.$durationMes.success({
               message: '暂无商品添加购物车',
-            })
+            });
+				    this.ifAll=false;
           }else {
-            // res.data.forEach((item) => {
-            //   item.checked = false;
-            // })
             // 后端返回的数据不好，自己加一点
-            // this.cartDatas = Object.assign({},this.cartDatas,res.data);
             if(this.cartDatas.length==0 || this.cartDatas.length>res.data.length){
               this.cartDatas = res.data;
             }else {
@@ -156,8 +153,7 @@
                 Object.assign(item,res.data[index])
               })
             }
-            // this.cartDatas = tempObj;
-            // this.$set(this.data(),'cartDatas',Object.assign(this.cartDatas,res.data))
+
           }
 				},(err)=>{
 					console.log(err);
@@ -180,6 +176,7 @@
         // 一个个都打完钩，全选才亮
         this.selectBuy.length==this.cartDatas.length?this.ifAll=true:'';
       },
+      // 修改购物车中商品的数量
       changeNum(ifAdd,pId,num){
 			  if(num==1){
 			    this.$durationMes.warning({
@@ -197,7 +194,7 @@
           })
         }
       },
-
+      // 全选按钮
       selectAll(){
         this.ifAll=!this.ifAll;
         // 如果是确定
@@ -207,6 +204,7 @@
             //   this.allMoney+=item['product_uprice']*item['goods_num'];
             // }
             this.$set(item,'checked',true)
+            if(this.selectBuy.indexOf(item['product_id'])===-1)
             this.selectBuy.push(item['product_id'])
           })
 
@@ -221,12 +219,38 @@
           })
         }
       },
+      // 删除购物车的商品
+      delProduct(pId){
+        let type;
+        this.$http.post('/delProduct',{
+          pId
+        }).then((res) => {
+          if(res.data.status=='00'){
+            type='success'
+          }else{
+            type="error"
+          }
+          this.getCartDatas().then(() => {
+            this.$durationMes[type]({
+              message: res.data.msg,
+            })
+          })
+
+        })
+      },
+      // 确认支付后的扣除余额
       confirmPay(){
         // 让cartMain去进行支付
+        let uId;
+        if(sessionStorage.userInfo!=='undefined'&&sessionStorage.userInfo){
+          uId=JSON.parse(sessionStorage.userInfo)['user_id'];
+        }
         this.$http.post('/pay',{
-          selectBuy: this.selectBuy
+          selectBuy: this.selectBuy,
+          money: this.allMoney,
+          uId: uId
         }).then((res) => {
-          if(res.data.status==1){
+          if(res.data.status===1){
             // 重新请求，更新数据
             this.selectBuy=[];
             this.getCartDatas().then(() => {
@@ -237,17 +261,25 @@
                 message: '支付成功',
               })
             });
-          }else if(res.data.status==401){
+          }else if(res.data.status===401){
             this.$durationMes.warning({
               message: '请先登录',
             })
           }else {
-            this.$durationMes.error({
-              message: res.data.msg,
-            })
+            if(res.data.status==='01'){
+              this.$durationMes.warning({
+                message: res.data.msg
+              })
+              this.centerDialogVisible=false;
+            }else {
+              this.$durationMes.error({
+                message: res.data.msg,
+              })
+            }
           }
         })
       },
+      // 是否剁手,打开支付确认框
       ifPay(){
         if(this.allMoney==0){
           this.$durationMes.warning({

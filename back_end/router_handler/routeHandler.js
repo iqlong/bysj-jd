@@ -56,7 +56,9 @@ function getSearchData(keywordStr, res,str) {
             res.status(500).send('database err').end();
         } else {
             if (data.length == 0) {
-                res.status(500).send('no datas').end();
+                res.send({
+                  msg: 'no data',
+                }).end();
             } else {
                 res.send(data);
             }

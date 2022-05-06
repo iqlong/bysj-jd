@@ -4986,13 +4986,15 @@ CREATE TABLE `user` (
   `user_number` varchar(40) NOT NULL,
   `user_photo` varchar(200) DEFAULT NULL,
   `verification_code` varchar(20) DEFAULT NULL,
+  `balance` decimal(8,2) DEFAULT NULL,
+  `address` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'huangche', 'huangche', '123456', '18389379755', null, null);
-INSERT INTO `user` VALUES ('2', 'huangche123', 'http://127.0.0.1:8080/back/images/userphone.jpg', null, '18269287753', null, null);
-INSERT INTO `user` VALUES ('3', 'rootcat007', 'cdd733aad2d0b134c537011af33613f1', null, '18389378862', null, null);
-INSERT INTO `user` VALUES ('4', 'xiaoyanzi', '7c0d49184b57774a3d73cb591e20d30d', null, '18889409793', null, null);
+INSERT INTO `user` VALUES ('1', 'admin', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755', 'https://iqlong.github.io/staticBysj/lv%E7%9A%84%E6%88%91.jpg', null,15000,'郴州市大街上');
+INSERT INTO `user` VALUES ('2', 'huangche123', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','http://127.0.0.1:8080/back/images/userphone.jpg', null, 2000, null);
+INSERT INTO `user` VALUES ('3', 'rootcat007', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','https://iqlong.github.io/staticBysj/1.jpg', null, 2000, null);
+INSERT INTO `user` VALUES ('4', 'xiaoyanzi', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','https://iqlong.github.io/staticBysj/02.jpg', null,888, null);

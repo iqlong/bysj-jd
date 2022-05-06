@@ -4,8 +4,9 @@
 	    <section class="mine_infos clearfix">
 	        <div class="mmm_info">
 	            <div class="user_icon">
-	                <img src="../../assets/images/my_icon.jpg" alt="">
-	            </div>
+                <!--<img src="../../assets/images/my_icon.jpg" alt="">-->
+                <img :src="userImg" alt="">
+              </div>
 	            <div class="user_detal">
 	                <p class="user_name">{{uInfs.user_name}}</p>
 	                <div class="reg">
@@ -21,8 +22,8 @@
 	                </div>
 	            </div>
 	            <div class="manage_account">
-	                <span>
-	                    账户管理 >
+	                <span @click="userMesDialog=true" class="pointerBox">
+	                    详情信息 >
 	                </span>
 	            </div>
 	        </div>
@@ -96,7 +97,7 @@
 	            <ul>
 	                <li class="order_item">
 	                    <a href="#" class="order_item_link">
-	                        <span style="margin-top: -5px;display: block">0</span>
+	                        <span style="margin-top: -5px;display: block">{{uInfs.balance||0}}</span>
 	                        <span class="order_item_pay">账户余额</span>
 	                    </a>
 	                </li>
@@ -207,16 +208,54 @@
 	        </div>
 	    </section>
 	</main>
+    <el-dialog
+        title='用户信息详情表'
+        :visible.sync="userMesDialog"
+        width="50%"
+        center>
+      <div class="flexBox">
+        <el-avatar shape="square" size="large" :src="userImg"></el-avatar>
+      </div>
+
+      <el-descriptions class="margin-top" title="" :column="3" >
+        <template slot="extra">
+          <!--<el-button type="primary" size="small">操作</el-button>-->
+          <div></div>
+        </template>
+        <el-descriptions-item label="用户名">{{uInfs['user_name']}}</el-descriptions-item>
+        <el-descriptions-item label="手机号">{{uInfs['user_number']}}</el-descriptions-item>
+        <el-descriptions-item label="账户余额">{{uInfs['balance']}}元</el-descriptions-item>
+        <el-descriptions-item label="备注-id">
+          <el-tag size="small">{{uInfs['user_id']}}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="联系地址">{{uInfs['address']}}</el-descriptions-item>
+        <el-descriptions-item label="头像">{{uInfs['user_photo']}}</el-descriptions-item>
+
+      </el-descriptions>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="userMesDialog = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="userMesDialog = false" size="small">确 定</el-button>
+      </span>
+    </el-dialog>
 	</div>
 </template>
 <script>
 	export default{
 		data(){
 			return{
-				uInfs:{}
+				uInfs:{},
+        userInfo: window.sessionStorage.userInfo,
+        userMesDialog: false
 			}
 		},
+    computed:{
+      userImg(){
+        // let userInfo=window.sessionStorage.userInfo;
+        return this.userInfo&&this.userInfo!=='undefined' ? JSON.parse(this.userInfo)['user_photo'] : undefined;
+      }
+    },
 		mounted(){
+		  window.vue=this;
 			this.getUDatas();
 		},
 		methods:{
@@ -246,3 +285,11 @@
 		}
 	}
 </script>
+<style scoped lang="less">
+.flexBox{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+</style>

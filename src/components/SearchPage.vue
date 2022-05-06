@@ -37,7 +37,7 @@
         </section>
         <main class="main_goods_box">
           <ul>
-            <li class="goods_item" v-for="item in mDatas">
+            <li class="goods_item" v-for="item in mDatas" v-show="mDatas.length>0">
               <router-link :to="'/detail/'+item.product_id" class="goods_item_link">
                 <img v-lazy="item.product_img_url" alt="" class="goods_item_pic">
                 <div class="goods_right">
@@ -95,7 +95,14 @@ export default {
           priceDown: ''
         }
       }).then((res) => {
-        this.mDatas = res.data;
+        if(res.data.msg=='no data'){
+          this.mDatas=[];
+          this.$durationMes.warning({
+            message: '暂无商品'
+          })
+        }else {
+          this.mDatas = res.data;
+        }
       }, (err) => {
         console.log(err);
       });
