@@ -25,7 +25,7 @@
           <p class="p_name">{{ goodsData.length>0?goodsData[0]['product_name']:'' }}</p>
           <div class="product_pric">
             <span>￥</span>
-            <span class="rel_price">{{ goodsData.length>0?goodsData[0]['product_price']:'' }}</span>
+            <span class="rel_price">{{ goodsData.length>0?goodsData[0]['product_uprice']:'' }}</span>
             <span>.00</span>
           </div>
           <div class="product_right">

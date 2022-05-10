@@ -6,6 +6,9 @@ const route = express.Router();
 const routerHandler = require('../router_handler/routeHandler')
 const db = require('../db/index');
 const expressJwt = require('express-jwt')
+const multer = require('multer')
+const fs = require('fs')
+const path=require('path')
 
 const getHomeStr = `SELECT product_id,product_name,product_price,product_img_url,product_uprice FROM product`;
 const getCateNames = `SELECT * FROM category ORDER BY category_id desc`;
@@ -15,6 +18,53 @@ route.get('/home', (req, res) => {
     routerHandler.getHomeData(getHomeStr, res);
 });
 
+// 分页查询shop表格
+route.get('/shop',(req,res) =>{
+    console.log('gg',req.query)
+    let {size=10,num=0}=req.query;
+    size=parseInt(size);
+    num=parseInt(num);
+    const selectStr='select * from shop limit ?,?';
+    const start=(num-1)*size;
+    let allDataLen;
+    db.query('select * from shop',(err,data) => {
+        allDataLen=data.length;
+        db.query(selectStr,[start,size],(err,data) => {
+            if(err){
+                console.log(err);
+            }else {
+                if(data.length>0){
+                    res.send({
+                        msg: '查询成功',
+                        status: '00',
+                        data: data,
+                        allDataLen:allDataLen
+                    })
+                }else {
+                    res.send({
+                        msg: '库中无想要的数据',
+                        status: '10',
+                        allDataLen:allDataLen
+                    })
+                }
+            }
+        })
+    })
+})
+route.post('/addShop',(req,res) => {
+    let {name,address} = req.body;
+    const insetStr = `insert into shop (shop_name,shop_address) values(?,?)`
+    db.query(insetStr,[name,address],(e) => {
+        if(e){
+            console.log(e)
+        }else {
+            res.send({
+                msg: '已创建商铺',
+                status: '00'
+            })
+        }
+    })
+})
 
 
 route.get('/category', (req, res) => {
@@ -27,7 +77,98 @@ route.get('/categorygoods', (req, res) => {
     const sql = `select * from product,category where product.category_id=category.category_id and category.category_id='${mId}'`;
     routerHandler.getCateGoods(sql, res);
 });
+route.post('/category/add',(req,res) => {
+    let {pid,name,description}=req.body;
+    const insertStr=`insert into category (category_pid,category_name,description) 
+                        values(${pid},'${name}',${description?description:'null'})`;
+    console.log(insertStr);
+    db.query(insertStr,(err) => {
+        if(err){
+            console.log(err)
+        }else {
+            res.send({
+                msg: '已添加商品种类',
+                status: '00'
+            })
+        }
+    })
+})
 
+//创建一个multer对象，dest用来设置上传文件存放的目录
+// let upload = multer({dest: path.join(__dirname,'../uploads')});
+let upload = multer({dest: path.join(__dirname,'../uploads')});
+let uploadDir=path.join(__dirname,'../uploads');
+//single()方法是用来处理单个文件上传，注意参数的名字要与表单中的name值一致
+route.post('/upload', upload.single('image'), function (req, res) {
+    const url=`http://localhost:3333/${req.file.originalname}`
+    console.log(url)
+    if(fs.existsSync(`${uploadDir}/${req.file.originalname}`)){
+        // 文件重名了，删除原文件再上传并重命名
+        fs.unlink(`${uploadDir}/${req.file.originalname}`,(err)=>{
+            if(err){
+                console.log(`删除文件错误，原因是${err}`)
+            }else {
+                console.log(`删除文件${req.file.originalname}成功`)
+                console.log(`开始将${req.file.filename}改名字为${req.file.originalname}`)
+                fs.renameSync(`${uploadDir}/${req.file.filename}`,`${uploadDir}/${req.file.originalname}`);
+                res.send ({
+                    msg: '覆盖成功',
+                    status: '00',
+                    url
+                });
+            }
+        })
+
+    }else {
+        // 直接上传并重命名
+        let oldPath=`${uploadDir}/` + req.file.filename,
+            newPath=`${uploadDir}/${req.file.originalname}`;
+        let re=fs.renameSync(oldPath,newPath);
+        res.send ({
+            msg: '上传成功',
+            status: '00',
+            url
+        });
+    }
+});
+route.post('/test',(req,res) => {
+    console.log('entered')
+    db.query('select * from user where user_id=1;select * from shop where shop_id=1',(e,data) => {
+        console.log(data)
+        res.send()
+    })
+})
+route.post('/addProduct',(req,res) => {
+    let {pid,images,name,uPrice,productNum,description,shopId}=req.body;
+    const insertStr=`insert into product (category_id,product_img_url,product_name,product_uprice,
+                        product_num,product_detail,shop_id) values(${pid},'${images[0]}','${name}',${uPrice},
+                        ${productNum},'${description}',${shopId})`;
+    console.log(images.length);
+    db.query(insertStr,(err,data) => {
+        if(err){
+            console.log(err)
+        }else {
+            let insId = data.insertId;
+            let insertImg=`insert into product_image (product_id,image_url) values(${insId},`;
+            let endInsert='',temp;
+            for(let i=0;i<images.length;i++){
+                // temp = insertImg+images[i]+');'
+                temp = `${insertImg}'${images[i]}');`
+                endInsert+=temp;
+            }
+            db.query(endInsert,err => {
+                if(err){
+                    console.log(err)
+                }else {
+                    res.send({
+                        msg: '商品添加成功',
+                        status: '00'
+                    })
+                }
+            })
+        }
+    })
+});
 
 route.get('/detail', (req, res) => {
     let produId = req.query.mId;
@@ -270,6 +411,7 @@ route.post('/reg', (req, res) => {
     let regName = req.body.regName;
     let regPasswd = req.body.regPasswd
     let {address,tel,balance}=req.body;
+    console.log(address)
     let selectU = `SELECT * FROM user where user_name='${regName}'`
     db.query(selectU,(err,data) => {
         if(err){
@@ -278,10 +420,11 @@ route.post('/reg', (req, res) => {
         }else {
             if(data.length == 0){
                 regPasswd = common.md5(regPasswd + common.MD5_SUFFXIE);
-                const insUserInfo = `INSERT INTO user(user_name,login_password,user_photo,balance,user_number,address)`+
+                const insUserInfo = `INSERT INTO user(user_name,login_password,user_photo,balance,user_number,address,isAdmin)`+
                     `VALUES('${regName}','${regPasswd}','https://iqlong.github.io/staticBysj/pigHead.jpg',`+
-                    `${balance?balance:2000},'${tel?tel:'18570552406'}','${address?address:'郴州市北湖区文化路'}')`;
+                    `${balance?balance:2000},'${tel?tel:'18570552406'}','${address?address:'郴州市北湖区文化路'}',0)`;
                 routerHandler.delReg(insUserInfo, res);
+                console.log(insUserInfo)
             }else {
                 console.log('用户存在了')
                 res.send({
@@ -334,14 +477,24 @@ route.get('/logout', (req, res) => {
     }).end();
 
 });
+route.post('/changePwd',
+    expressJwt({
+        secret: secretKey,
+        algorithms: ['HS256']
+    })
+
+)
 route.post('/changePwd', (req, res) => {
     // 根据名字查找用户，要是密码改变了，就修改库表
     let username = req.body.username;
+    let nowUser=req.body.nowUser;
     let password = common.md5(req.body.password + common.MD5_SUFFXIE);
     const getPwd = `SELECT login_password FROM user where user_name='${username}'`;
     const setPwd = `UPDATE user set login_password='${password}' WHERE user_name='${username}'`;
     // 简单的实现角色功能 --- 权限问题
-    if(req.user['user_name'] !== username){
+    // console.log(req.user);
+    // if(req.user['user_name'] !== username){
+    if(nowUser !== username){
         res.send({
             msg: '权限不够',
             status: 403
@@ -349,6 +502,7 @@ route.post('/changePwd', (req, res) => {
     }else {
         // 然后退出登录    前端中调用接口
         db.query(getPwd,(err, data) => {
+            console.log('2')
             if(err){
                 console.log(err);
                 res.send({
@@ -383,8 +537,22 @@ route.post('/changePwd', (req, res) => {
 });
 
 route.get('/userinfo', (req, res) => {
-    let uId = req.query.uId;
-    const getU = `SELECT * FROM user where user_id='${uId}'`;
+    let {uId,isAdmin}=req.query;
+    let getU
+    if(uId){
+        if(!isAdmin) {
+            getU = `SELECT * FROM user where user_id=${uId} and isAdmin=0`;
+        }else {
+            getU = `SELECT * FROM user where user_id=${uId} and isAdmin=1`;
+        }
+    }else {
+        if(!isAdmin) {
+            getU = `SELECT * FROM user where isAdmin=0`;
+        }else {
+            getU = `SELECT * FROM user where isAdmin=1`;
+        }
+    }
+    console.log(getU)
     db.query(getU, (err, data) => {
         if (err) {
             console.log(err);
@@ -393,7 +561,11 @@ route.get('/userinfo', (req, res) => {
             if (data.length == 0) {
                 res.status(500).send('no datas').end();
             } else {
-                res.send(data[0]);
+                if(uId){
+                    res.send(data[0]);
+                }else {
+                    res.send(data)
+                }
             }
         }
     });

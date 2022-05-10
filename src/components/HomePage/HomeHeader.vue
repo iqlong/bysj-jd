@@ -127,7 +127,8 @@ export default {
       // 发送修改密码的请求
       this.$http.post('/changePwd',{
         username: this.username,
-        password: this.password
+        password: this.password,
+        nowUser: sessionStorage.userInfo&&sessionStorage.userInfo!==null?JSON.parse(sessionStorage.userInfo)['user_name']:''
       }).then((res) =>{
         // 新旧密码一样
         if(res.data.status == 304){

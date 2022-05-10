@@ -70,7 +70,6 @@
 				}).then((res)=>{
 					if(res.status == 200){
 						_this.regInfo = res.data;
-						debugger
 						if(_this.regInfo.status == 1){
 							//reg success, go to this login page
 							window.history.go(-1);

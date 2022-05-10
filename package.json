@@ -21,6 +21,7 @@
     "jsonp": "^0.2.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
+    "multer": "^1.4.4",
     "mysql": "^2.13.0",
     "vue": "^2.2.1",
     "vue-lazyload": "^1.0.3"

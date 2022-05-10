@@ -49,6 +49,7 @@ CREATE TABLE `category` (
   `category_id` int(100) NOT NULL AUTO_INCREMENT,
   `category_pid` int(11) DEFAULT NULL,
   `category_name` varchar(200) DEFAULT NULL,
+  `description` varchar(800) DEFAULT NULL,
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
@@ -4988,6 +4989,7 @@ CREATE TABLE `user` (
   `verification_code` varchar(20) DEFAULT NULL,
   `balance` decimal(8,2) DEFAULT NULL,
   `address` varchar(50) DEFAULT NULL,
+  `isAdmin` bit(1,0) DEFAULT 0,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 

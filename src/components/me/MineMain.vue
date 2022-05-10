@@ -260,24 +260,23 @@
 		},
 		methods:{
 			getUDatas(){
-				let _this = this;
 				let uObj ={};
 				if(window.sessionStorage.userInfo && sessionStorage.userInfo!=='undefined'){
 					let uObj = JSON.parse(window.sessionStorage.userInfo);
 					let useId = uObj.user_id;
-					_this.$http.get('/userinfo',{
+					this.$http.get('/userinfo',{
 						params:{
 							uId:useId
 						}
 					}).then((res)=>{
-						_this.uInfs = res.data;
-						console.log(_this.uInfs);
+						this.uInfs = res.data;
+						console.log(this.uInfs);
 					},(err)=>{
 						console.log(err);
 					});
 				}else{
 				  // 没有登录就使用push方法，但是这样会导致 go(-1)出现问题
-					_this.$router.push({
+					this.$router.push({
 						path:'/login',
 					})
 				}

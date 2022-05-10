@@ -17,11 +17,11 @@
                                     <img v-lazy="item.product_img_url" alt="" class="product_skill_item_cion lazy-img-fadein">
                                     <p class="nowprice">
                                         <i style="text-decoration: none;font-style: normal;font-size: 12px">¥</i>
-                                        <span class="now_price">{{item.product_price}}</span>
+                                        <span class="now_price">{{item.product_uprice}}</span>
                                     </p>
                                     <p class="oldprice">
                                         <i style="text-decoration: none;font-style: normal;font-size: 12px">¥</i>
-                                        <del class="old_price">{{item.product_uprice}}</del>
+                                        <del class="old_price">{{item.product_price}}</del>
                                     </p>
                                 </router-link>
                             </li>

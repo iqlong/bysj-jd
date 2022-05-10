@@ -4,11 +4,14 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const cors = require('cors')
+const path=require('path')
 const mysql = require('mysql');
 const server = express();
 const expressJwt = require('express-jwt')
 
 const secretKey = 'happy everyday!'
+
+server.use(express.static(path.join(__dirname,'/uploads')))
 
 server.use(express.json())
 server.use(express.urlencoded({ extended: false }));
