@@ -7,6 +7,7 @@ const cors = require('cors')
 const path=require('path')
 const mysql = require('mysql');
 const server = express();
+const router=require('./router/router')
 const expressJwt = require('express-jwt')
 
 const secretKey = 'happy everyday!'
@@ -54,9 +55,14 @@ server.all('*', function(req, res, next) {
 
 
 //deal router
-server.use('/', require('./router/router'));
+server.use(router);
 
 server.use((err,req,res,next) => {
+    if(err){
+        res.send({data:err,msg:'错误级别中间件捕获的错误'})
+        return
+    }
+    console.log('发生了依次错误')
     if(err.name === 'UnauthorizedError') {
         return res.send({status: 401, message: '无效的token'});
     }

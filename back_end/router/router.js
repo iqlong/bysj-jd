@@ -77,13 +77,24 @@ route.get('/categorygoods', (req, res) => {
     const sql = `select * from product,category where product.category_id=category.category_id and category.category_id='${mId}'`;
     routerHandler.getCateGoods(sql, res);
 });
+function x(r){
+    r.send({
+            msg: '错误',
+            status: '00'
+        })
+};
 route.post('/category/add',(req,res) => {
     let {pid,name,description}=req.body;
     const insertStr=`insert into category (category_pid,category_name,description) 
                         values(${pid},'${name}',${description?description:'null'})`;
     console.log(insertStr);
+    // throw  new Error('gg')
     db.query(insertStr,(err) => {
         if(err){
+            x(res);
+            // throw  new Error('gg')
+            return new Error('gg')
+            throw err
             console.log(err)
         }else {
             res.send({
@@ -99,9 +110,9 @@ route.post('/category/add',(req,res) => {
 let upload = multer({dest: path.join(__dirname,'../uploads')});
 let uploadDir=path.join(__dirname,'../uploads');
 //single()方法是用来处理单个文件上传，注意参数的名字要与表单中的name值一致
-route.post('/upload', upload.single('image'), function (req, res) {
+route.post('/upload', upload.single('file'), function (req, res) {
     const url=`http://localhost:3333/${req.file.originalname}`
-    console.log(url)
+    console.log(req.file)
     if(fs.existsSync(`${uploadDir}/${req.file.originalname}`)){
         // 文件重名了，删除原文件再上传并重命名
         fs.unlink(`${uploadDir}/${req.file.originalname}`,(err)=>{
@@ -132,7 +143,6 @@ route.post('/upload', upload.single('image'), function (req, res) {
     }
 });
 route.post('/test',(req,res) => {
-    console.log('entered')
     db.query('select * from user where user_id=1;select * from shop where shop_id=1',(e,data) => {
         console.log(data)
         res.send()
@@ -143,31 +153,37 @@ route.post('/addProduct',(req,res) => {
     const insertStr=`insert into product (category_id,product_img_url,product_name,product_uprice,
                         product_num,product_detail,shop_id) values(${pid},'${images[0]}','${name}',${uPrice},
                         ${productNum},'${description}',${shopId})`;
-    console.log(images.length);
-    db.query(insertStr,(err,data) => {
-        if(err){
-            console.log(err)
-        }else {
-            let insId = data.insertId;
-            let insertImg=`insert into product_image (product_id,image_url) values(${insId},`;
-            let endInsert='',temp;
-            for(let i=0;i<images.length;i++){
-                // temp = insertImg+images[i]+');'
-                temp = `${insertImg}'${images[i]}');`
-                endInsert+=temp;
-            }
-            db.query(endInsert,err => {
-                if(err){
-                    console.log(err)
-                }else {
-                    res.send({
-                        msg: '商品添加成功',
-                        status: '00'
-                    })
+    if(!pid || !shopId || images.length<2){
+        res.send({
+            msg: '信息不全，建议补充',
+            status: '11'
+        })
+    }else {
+        db.query(insertStr,(err,data) => {
+            if(err){
+                console.log(err)
+            }else {
+                let insId = data.insertId;
+                let insertImg=`insert into product_image (product_id,image_url) values(${insId},`;
+                let endInsert='',temp;
+                for(let i=0;i<images.length;i++){
+                    // temp = insertImg+images[i]+');'
+                    temp = `${insertImg}'${images[i]}');`
+                    endInsert+=temp;
                 }
-            })
-        }
-    })
+                db.query(endInsert,err => {
+                    if(err){
+                        console.log(err)
+                    }else {
+                        res.send({
+                            msg: '商品添加成功',
+                            status: '00'
+                        })
+                    }
+                })
+            }
+        })
+    }
 });
 
 route.get('/detail', (req, res) => {
@@ -186,8 +202,14 @@ route.get('/detail', (req, res) => {
                     console.error(err);
                     res.status(500).send('database err').end();
                 } else {
-                    detailData.push(data);
-                    res.send(detailData);
+                    console.log(data,data[0]['shop_id'])
+                    db.query('select shop_name,shop_address from shop where shop_id=?',[data[0]['shop_id']],(e,inData) => {
+                        data[0].shopName=inData[0]['shop_name']
+                        data[0].shopAddress=inData[0]['shop_address']
+                        detailData.push(data);
+                        res.send(detailData);
+                    })
+
                 }
             });
         }
@@ -215,7 +237,6 @@ route.get('/cart', (req, res) => {
     });
 })
 route.post('/addCart',(req,res) => {
-
     let {uId,pId,createTime: created} = req.body;
     let insCartStr;
     if(uId){
@@ -410,8 +431,7 @@ route.get('/search', (req, res) => {
 route.post('/reg', (req, res) => {
     let regName = req.body.regName;
     let regPasswd = req.body.regPasswd
-    let {address,tel,balance}=req.body;
-    console.log(address)
+    let {address, tel, balance} = req.body;
     let selectU = `SELECT * FROM user where user_name='${regName}'`
     db.query(selectU,(err,data) => {
         if(err){
@@ -420,7 +440,8 @@ route.post('/reg', (req, res) => {
         }else {
             if(data.length == 0){
                 regPasswd = common.md5(regPasswd + common.MD5_SUFFXIE);
-                const insUserInfo = `INSERT INTO user(user_name,login_password,user_photo,balance,user_number,address,isAdmin)`+
+                const insUserInfo = `INSERT INTO user(user_name,login_password,user_photo,balance,user_number,
+                    address,isAdmin)`+
                     `VALUES('${regName}','${regPasswd}','https://iqlong.github.io/staticBysj/pigHead.jpg',`+
                     `${balance?balance:2000},'${tel?tel:'18570552406'}','${address?address:'郴州市北湖区文化路'}',0)`;
                 routerHandler.delReg(insUserInfo, res);

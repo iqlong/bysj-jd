@@ -21,16 +21,28 @@
 
       </section>
       <section class="product_info clearfix">
-        <div class="product_left">
+        <div class="product_left" style="position: relative">
           <p class="p_name">{{ goodsData.length>0?goodsData[0]['product_name']:'' }}</p>
           <div class="product_pric">
             <span>￥</span>
             <span class="rel_price">{{ goodsData.length>0?goodsData[0]['product_uprice']:'' }}</span>
             <span>.00</span>
           </div>
+          <div style="position: absolute;top: 5px;left: 340px;font: 20px bolder;">
+            <div>
+              <span>店铺名称: </span>
+              <span> {{ goodsData.length>0?goodsData[0].shopName:'我竟然没有店铺名称，众筹一个吧~'}}</span>
+            </div>
+            <div>
+              <span>店铺地址: </span>
+              <span> {{ goodsData.length>0?goodsData[0].shopAddress:'喜马拉雅山顶山~'}}</span>
+            </div>
+
+          </div>
           <div class="product_right">
             降价通知
           </div>
+
         </div>
 
       </section>

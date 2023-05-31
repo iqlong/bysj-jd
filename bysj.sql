@@ -1,10 +1,10 @@
 /*
-Navicat MySQL Data Transfer
+Navicat  Data TransfeMySQLr
 
 Source Server         : localhost
 Source Server Version : 50703
 Source Host           : localhost:3306
-Source Database       : myigou
+Source Database       : bysj
 
 Target Server Type    : MYSQL
 Target Server Version : 50703
@@ -56,38 +56,38 @@ CREATE TABLE `category` (
 -- ----------------------------
 -- Records of category
 -- ----------------------------
-INSERT INTO `category` VALUES ('3', '100001', '女装');
-INSERT INTO `category` VALUES ('4', '100001', '男装');
-INSERT INTO `category` VALUES ('5', '100001', '童装');
-INSERT INTO `category` VALUES ('6', '100002', '皮鞋');
-INSERT INTO `category` VALUES ('7', '100002', '运动鞋');
-INSERT INTO `category` VALUES ('8', '100002', '休闲鞋');
-INSERT INTO `category` VALUES ('9', '100002', '高帮鞋');
-INSERT INTO `category` VALUES ('10', '100002', '帆布鞋');
-INSERT INTO `category` VALUES ('11', '100002', '靴子');
-INSERT INTO `category` VALUES ('12', '100003', '冰箱');
-INSERT INTO `category` VALUES ('13', '100003', '洗衣机');
-INSERT INTO `category` VALUES ('14', '100003', '平板电视');
-INSERT INTO `category` VALUES ('15', '100003', '空调');
-INSERT INTO `category` VALUES ('16', '100003', '烟灶消套装');
-INSERT INTO `category` VALUES ('17', '100004', '数码相机');
-INSERT INTO `category` VALUES ('18', '100004', '单反相机');
-INSERT INTO `category` VALUES ('19', '100004', '摄像机');
-INSERT INTO `category` VALUES ('20', '100004', '长焦相机');
-INSERT INTO `category` VALUES ('21', '100005', '居家');
-INSERT INTO `category` VALUES ('22', '100005', '饰物');
-INSERT INTO `category` VALUES ('23', '100005', '玩具');
-INSERT INTO `category` VALUES ('24', '100005', '文具');
-INSERT INTO `category` VALUES ('25', '100006', '西式糕点');
-INSERT INTO `category` VALUES ('26', '100006', '饼干');
-INSERT INTO `category` VALUES ('27', '100006', '肌肉类零食');
-INSERT INTO `category` VALUES ('28', '100006', '糖果');
-INSERT INTO `category` VALUES ('29', '100007', '拉杠箱');
-INSERT INTO `category` VALUES ('30', '100007', '登机箱');
-INSERT INTO `category` VALUES ('31', '100007', '旅行包');
-INSERT INTO `category` VALUES ('32', '100007', '双肩包');
-INSERT INTO `category` VALUES ('33', '100007', '托运箱');
-INSERT INTO `category` VALUES ('34', '100004', '手机');
+INSERT INTO `category` VALUES ('3', '100001', '女装', '');
+INSERT INTO `category` VALUES ('4', '100001', '男装', '');
+INSERT INTO `category` VALUES ('5', '100001', '童装', '');
+INSERT INTO `category` VALUES ('6', '100002', '皮鞋', '');
+INSERT INTO `category` VALUES ('7', '100002', '运动鞋', '');
+INSERT INTO `category` VALUES ('8', '100002', '休闲鞋', '');
+INSERT INTO `category` VALUES ('9', '100002', '高帮鞋', '');
+INSERT INTO `category` VALUES ('10', '100002', '帆布鞋', '');
+INSERT INTO `category` VALUES ('11', '100002', '靴子', '');
+INSERT INTO `category` VALUES ('12', '100003', '冰箱', '');
+INSERT INTO `category` VALUES ('13', '100003', '洗衣机', '');
+INSERT INTO `category` VALUES ('14', '100003', '平板电视', '');
+INSERT INTO `category` VALUES ('15', '100003', '空调', '');
+INSERT INTO `category` VALUES ('16', '100003', '烟灶消套装', '');
+INSERT INTO `category` VALUES ('17', '100004', '数码相机', '');
+INSERT INTO `category` VALUES ('18', '100004', '单反相机', '');
+INSERT INTO `category` VALUES ('19', '100004', '摄像机', '');
+INSERT INTO `category` VALUES ('20', '100004', '长焦相机', '');
+INSERT INTO `category` VALUES ('21', '100005', '居家', '');
+INSERT INTO `category` VALUES ('22', '100005', '饰物', '');
+INSERT INTO `category` VALUES ('23', '100005', '玩具', '');
+INSERT INTO `category` VALUES ('24', '100005', '文具', '');
+INSERT INTO `category` VALUES ('25', '100006', '西式糕点', '');
+INSERT INTO `category` VALUES ('26', '100006', '饼干', '');
+INSERT INTO `category` VALUES ('27', '100006', '肌肉类零食', '');
+INSERT INTO `category` VALUES ('28', '100006', '糖果', '');
+INSERT INTO `category` VALUES ('29', '100007', '拉杠箱', '');
+INSERT INTO `category` VALUES ('30', '100007', '登机箱', '');
+INSERT INTO `category` VALUES ('31', '100007', '旅行包', '');
+INSERT INTO `category` VALUES ('32', '100007', '双肩包', '');
+INSERT INTO `category` VALUES ('33', '100007', '托运箱', '');
+INSERT INTO `category` VALUES ('34', '100004', '手机', '');
 
 -- ----------------------------
 -- Table structure for `collect`
@@ -3435,14 +3435,14 @@ CREATE TABLE `orders` (
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
---INSERT INTO `orders` VALUES ('3', '150', '128.00', '3', '384.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '9563402100');
---INSERT INTO `orders` VALUES ('4', '11', '155.00', '2', '310.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '5963401800');
---INSERT INTO `orders` VALUES ('5', '122', '5598.00', '1', '5598.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '8462301700');
---INSERT INTO `orders` VALUES ('6', '106', '149.00', '1', '149.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '7452390600');
---INSERT INTO `orders` VALUES ('7', '113', '179.00', '2', '358.00', '3', '10', '11', '1', 'add_order', '2016-04-11 13:47:30', '5673821900');
---INSERT INTO `orders` VALUES ('8', '12', '399.00', '1', '399.00', '3', '10', '11', '1', 'add_order', '2016-04-11 13:47:30', '0369541800');
---INSERT INTO `orders` VALUES ('9', '107', '169.00', '1', '169.00', '3', '10', '11', '1', 'add_order', '2016-04-11 13:47:30', '5827901600');
---INSERT INTO `orders` VALUES ('10', '154', '149.00', '1', '149.00', '3', '10', '11', '0', 'add_order', '2016-04-11 13:52:32', '3017856200');
+-- INSERT INTO `orders` VALUES ('3', '150', '128.00', '3', '384.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '9563402100');
+-- INSERT INTO `orders` VALUES ('4', '11', '155.00', '2', '310.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '5963401800');
+-- INSERT INTO `orders` VALUES ('5', '122', '5598.00', '1', '5598.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '8462301700');
+-- INSERT INTO `orders` VALUES ('6', '106', '149.00', '1', '149.00', '1', '2', '11', '0', 'add_order', '2016-04-04 07:21:25', '7452390600');
+-- INSERT INTO `orders` VALUES ('7', '113', '179.00', '2', '358.00', '3', '10', '11', '1', 'add_order', '2016-04-11 13:47:30', '5673821900');
+-- INSERT INTO `orders` VALUES ('8', '12', '399.00', '1', '399.00', '3', '10', '11', '1', 'add_order', '2016-04-11 13:47:30', '0369541800');
+-- INSERT INTO `orders` VALUES ('9', '107', '169.00', '1', '169.00', '3', '10', '11', '1', 'add_order', '2016-04-11 13:47:30', '5827901600');
+-- INSERT INTO `orders` VALUES ('10', '154', '149.00', '1', '149.00', '3', '10', '11', '0', 'add_order', '2016-04-11 13:52:32', '3017856200');
 
 -- ----------------------------
 -- Table structure for `product`
@@ -4989,14 +4989,14 @@ CREATE TABLE `user` (
   `verification_code` varchar(20) DEFAULT NULL,
   `balance` decimal(8,2) DEFAULT NULL,
   `address` varchar(50) DEFAULT NULL,
-  `isAdmin` bit(1,0) DEFAULT 0,
+  `isAdmin` int(1) DEFAULT 0 check(isAdmin = 0 or isAdmin = 1),
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755', 'https://iqlong.github.io/staticBysj/lv%E7%9A%84%E6%88%91.jpg', null,15000,'郴州市大街上');
-INSERT INTO `user` VALUES ('2', 'huangche123', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','http://127.0.0.1:8080/back/images/userphone.jpg', null, 2000, null);
-INSERT INTO `user` VALUES ('3', 'rootcat007', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','https://iqlong.github.io/staticBysj/1.jpg', null, 2000, null);
-INSERT INTO `user` VALUES ('4', 'xiaoyanzi', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','https://iqlong.github.io/staticBysj/02.jpg', null,888, null);
+INSERT INTO `user` VALUES ('1', 'admin', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755', 'https://iqlong.github.io/staticBysj/lv%E7%9A%84%E6%88%91.jpg', null,15000,'郴州市大街上', 0);
+INSERT INTO `user` VALUES ('2', 'huangche123', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','http://127.0.0.1:8080/back/images/userphone.jpg', null, 2000, null, 0);
+INSERT INTO `user` VALUES ('3', 'rootcat007', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','https://iqlong.github.io/staticBysj/1.jpg', null, 2000, null, 0);
+INSERT INTO `user` VALUES ('4', 'xiaoyanzi', 'd772395d080e0c94558f1ad13dcd8aac', '123456', '18389379755','https://iqlong.github.io/staticBysj/02.jpg', null,888, null, 0);
